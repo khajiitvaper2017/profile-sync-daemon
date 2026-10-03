@@ -26,7 +26,7 @@ else
   BLU="\e[01;34m"
   NRM="\e[00m"
 fi
-VERS="@VERSION@"
+VERS="7.04"
 
 user=$(id -un)
 HOME="$(getent passwd "$user" | cut -d: -f6)"
@@ -83,14 +83,13 @@ if [[ -f "$PSDCONF" ]]; then
     # do nothing if psd is currently running, otherwise
     # make sure only comments and variables/arrays are defined to prevent
     # problems like issue #166
-    
     # regex to allow multiline arrays for PERSISTENT_PATHS
     config_regex='^[[:space:]]*$|^[[:space:]]*#|^[A-Za-z_][A-Za-z0-9_]*=[^;]*|^[[:space:]]*"[^"]*"[[:space:]]*$|^[[:space:]]*\)[[:space:]]*$'
     if grep -Eqv "$config_regex" "$PSDCONF"; then
       # something that isn't a blank line, comment, or variable present
       # so exit
       echo -e " ${RED}ERROR:${NRM}${BLD} Syntax error(s) detected in ${BLU}$PSDCONF${NRM}${BLD} - edit and try again.${NRM}"
-      echo -e "${NRM}${BLD}Line number: offending comment${NRM}"
+      echo -e "${NRM}${BLD}Offending lines:${NRM}"
       grep -Evn "$config_regex" "$PSDCONF"
       exit 1
     fi
